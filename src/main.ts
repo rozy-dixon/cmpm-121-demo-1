@@ -2,14 +2,24 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
+// ---------------------------------------------- DESIGN
+
+/* 
+- upgrade 1: auto-clicking
+*/
+
 // ---------------------------------------------- CONTENT
 
+// initialize name display
 const gameName = "Caffeine Clicker";
 document.title = gameName;
 
+// initialize counter display defaults
 let counter: number = 0;
 let unitLabel = "coffees deep";
+let growthRate = 0;
 
+// allow for counter increase
 function increaseCounter(x: number) {
   counter += x;
   if (Math.floor(counter) == 1) {
@@ -20,8 +30,22 @@ function increaseCounter(x: number) {
   counterDisplay.innerHTML = `${Math.floor(counter)} ${unitLabel}`;
 }
 
-const buttonContent = "☕";
+// allow for counter decrease
+function decreaseCounter(x: number) {
+  counter -= x;
+  if (Math.floor(counter) == 1) {
+    unitLabel = "coffee deep";
+  } else {
+    unitLabel = "coffees deep";
+  }
+  counterDisplay.innerHTML = `${Math.floor(counter)} ${unitLabel}`;
+}
 
+// initialize button contents
+const buttonContent = "☕";
+const upgrade1Content = "purchase upgrade";
+
+// allow for upgrade 1
 let curPerformance, fps;
 let prevPerformance = performance.now();
 function step() {
@@ -31,8 +55,15 @@ function step() {
   fps = 1000 / (curPerformance - prevPerformance);
   prevPerformance = curPerformance;
 
-  increaseCounter(1 / fps);
+  upgrade1Button.disabled = counter < 10;
+
+  increaseCounter(growthRate / fps);
   requestAnimationFrame(step);
+}
+
+function purshaseUpgrade1() {
+  decreaseCounter(10);
+  growthRate += 1;
 }
 
 // ---------------------------------------------- ASSEMBLY
@@ -45,6 +76,8 @@ const counterDisplay = document.createElement("div");
 counterDisplay.innerHTML = `${counter} ${unitLabel}`;
 app.append(counterDisplay);
 
+requestAnimationFrame(step);
+
 const button = document.createElement("button");
 button.innerHTML = buttonContent;
 app.append(button);
@@ -53,4 +86,10 @@ button.addEventListener("click", () => {
   increaseCounter(1);
 });
 
-requestAnimationFrame(step);
+const upgrade1Button = document.createElement("button");
+upgrade1Button.innerHTML = upgrade1Content;
+app.append(upgrade1Button);
+
+upgrade1Button.addEventListener("click", () => {
+  purshaseUpgrade1();
+});
