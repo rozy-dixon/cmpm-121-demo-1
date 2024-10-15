@@ -10,9 +10,9 @@ const growthRateSuffix: string = "coffees/second";
 
 const fix: number = 2;
 
-const upgradeACost: number = 10;
-const upgradeBCost: number = 100;
-const upgradeCCost: number = 1000;
+let upgradeACost: number = 10;
+let upgradeBCost: number = 100;
+let upgradeCCost: number = 1000;
 
 const upgradeAIncrease: number = 0.1;
 const upgradeBIncrease: number = 2.0;
@@ -42,9 +42,9 @@ function step() {
   upgradeBButton.disabled = counter < upgradeBCost;
   upgradeCButton.disabled = counter < upgradeCCost;
 
-  upgradeAButton.innerHTML = `A: ${upgradeACount}`;
-  upgradeBButton.innerHTML = `B: ${upgradeBCount}`;
-  upgradeCButton.innerHTML = `C: ${upgradeCCount}`;
+  upgradeAButton.innerHTML = `A: ${upgradeACount} ($${upgradeACost.toFixed(fix)})`;
+  upgradeBButton.innerHTML = `B: ${upgradeBCount} ($${upgradeBCost.toFixed(fix)})`;
+  upgradeCButton.innerHTML = `C: ${upgradeCCount} ($${upgradeCCost.toFixed(fix)})`;
 
   growthRateDisplay.innerHTML = `${growthRate.toFixed(fix)} ${growthRateSuffix}`;
 
@@ -84,34 +84,37 @@ clickButton.addEventListener("click", () => {
   setCounter();
 });
 
-const upgradeAContent = `A: ${upgradeACount}`;
+const upgradeAContent = `A: ${upgradeACount} ($${upgradeACost})`;
 const upgradeAButton = document.createElement("button");
 upgradeAButton.innerHTML = upgradeAContent;
 app.append(upgradeAButton);
 
 upgradeAButton.addEventListener("click", () => {
+  upgradeACost *= 1.15;
   setCounter(-upgradeACost);
   growthRate += upgradeAIncrease;
   upgradeACount++;
 });
 
-const upgradeBContent = `B: ${upgradeBCount}`;
+const upgradeBContent = `B: ${upgradeBCount} ($${upgradeBCost})`;
 const upgradeBButton = document.createElement("button");
 upgradeBButton.innerHTML = upgradeBContent;
 app.append(upgradeBButton);
 
 upgradeBButton.addEventListener("click", () => {
+  upgradeBCost *= 1.15;
   setCounter(-upgradeBCost);
   growthRate += upgradeBIncrease;
   upgradeBCount++;
 });
 
-const upgradeCContent = `C: ${upgradeCCount}`;
+const upgradeCContent = `C: ${upgradeCCount} ($${upgradeCCost})`;
 const upgradeCButton = document.createElement("button");
 upgradeCButton.innerHTML = upgradeCContent;
 app.append(upgradeCButton);
 
 upgradeCButton.addEventListener("click", () => {
+  upgradeCCost *= 1.15;
   setCounter(-upgradeCCost);
   growthRate += upgradeCIncrease;
   upgradeCCount++;
