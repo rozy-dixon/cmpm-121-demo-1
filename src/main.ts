@@ -7,6 +7,7 @@ const app: HTMLDivElement = document.querySelector("#app")!;
 let counter: number = 0;
 let growthRate: number = 0;
 const growthRateSuffix: string = "coffees/second";
+let rotation: number = 0;
 
 const fix: number = 2;
 
@@ -42,9 +43,9 @@ function step() {
   upgradeBButton.disabled = counter < upgradeBCost;
   upgradeCButton.disabled = counter < upgradeCCost;
 
-  upgradeAButton.innerHTML = `A: ${upgradeACount} ($${upgradeACost.toFixed(fix)})`;
-  upgradeBButton.innerHTML = `B: ${upgradeBCount} ($${upgradeBCost.toFixed(fix)})`;
-  upgradeCButton.innerHTML = `C: ${upgradeCCount} ($${upgradeCCost.toFixed(fix)})`;
+  upgradeAButton.innerHTML = `double shot: ${upgradeACount} ($${upgradeACost.toFixed(fix)})`;
+  upgradeBButton.innerHTML = `triple shot: ${upgradeBCount} ($${upgradeBCost.toFixed(fix)})`;
+  upgradeCButton.innerHTML = `quadruple shot: ${upgradeCCount} ($${upgradeCCost.toFixed(fix)})`;
 
   growthRateDisplay.innerHTML = `${growthRate.toFixed(fix)} ${growthRateSuffix}`;
 
@@ -76,46 +77,48 @@ app.append(growthRateDisplay);
 requestAnimationFrame(step);
 
 const clickContent = "☕";
-const clickButton = document.createElement("button");
+const clickButton = document.createElement("h2");
 clickButton.innerHTML = clickContent;
 app.append(clickButton);
 
 clickButton.addEventListener("click", () => {
   setCounter();
+  // src = https://chat.brace.tools/s/306ec42f-7ac1-4381-be4b-dbcb47af314f
+  clickButton.style.transform = `rotate(${(rotation += 360)}deg)`;
 });
 
-const upgradeAContent = `A: ${upgradeACount} ($${upgradeACost})`;
+const upgradeAContent = `double shot: ${upgradeACount} ($${upgradeACost})`;
 const upgradeAButton = document.createElement("button");
 upgradeAButton.innerHTML = upgradeAContent;
 app.append(upgradeAButton);
 
 upgradeAButton.addEventListener("click", () => {
-  upgradeACost *= 1.15;
   setCounter(-upgradeACost);
+  upgradeACost *= 1.15;
   growthRate += upgradeAIncrease;
   upgradeACount++;
 });
 
-const upgradeBContent = `B: ${upgradeBCount} ($${upgradeBCost})`;
+const upgradeBContent = `triple shot: ${upgradeBCount} ($${upgradeBCost})`;
 const upgradeBButton = document.createElement("button");
 upgradeBButton.innerHTML = upgradeBContent;
 app.append(upgradeBButton);
 
 upgradeBButton.addEventListener("click", () => {
-  upgradeBCost *= 1.15;
   setCounter(-upgradeBCost);
+  upgradeBCost *= 1.15;
   growthRate += upgradeBIncrease;
   upgradeBCount++;
 });
 
-const upgradeCContent = `C: ${upgradeCCount} ($${upgradeCCost})`;
+const upgradeCContent = `quadruple shot: ${upgradeCCount} ($${upgradeCCost})`;
 const upgradeCButton = document.createElement("button");
 upgradeCButton.innerHTML = upgradeCContent;
 app.append(upgradeCButton);
 
 upgradeCButton.addEventListener("click", () => {
-  upgradeCCost *= 1.15;
   setCounter(-upgradeCCost);
+  upgradeCCost *= 1.15;
   growthRate += upgradeCIncrease;
   upgradeCCount++;
 });
