@@ -21,12 +21,45 @@ interface Item {
   cost: number;
   rate: number;
   count: number;
+  description: string;
 }
 
 const availableItems: Item[] = [
-  { name: "double shot", cost: 10, rate: 0.1, count: 0 },
-  { name: "triple shot", cost: 100, rate: 2, count: 0 },
-  { name: "quadruple shot", cost: 1000, rate: 50, count: 0 },
+  {
+    name: "double shot",
+    cost: 10,
+    rate: 0.1,
+    count: 0,
+    description: "for when you need a pick me up",
+  },
+  {
+    name: "triple shot",
+    cost: 100,
+    rate: 2,
+    count: 0,
+    description: "for when you need more than a pick me up",
+  },
+  {
+    name: "quadruple shot",
+    cost: 1000,
+    rate: 50,
+    count: 0,
+    description: "for when you have to get it done",
+  },
+  {
+    name: "quintuple shot",
+    cost: 10000,
+    rate: 1000,
+    count: 0,
+    description: "no time to talk, i have stuff to do",
+  },
+  {
+    name: "sextuple shot",
+    cost: 100000,
+    rate: 10000,
+    count: 0,
+    description: "no thinking, just work",
+  },
 ];
 
 // ---------------------------------------------- FUNCTIONS
@@ -99,6 +132,7 @@ clickButton.addEventListener("click", () => {
 availableItems.forEach((element) => {
   const upgradeButton = document.createElement("button");
   upgradeButton.id = element.name;
+  upgradeButton.title = element.description;
   app.append(upgradeButton);
 
   upgradeButton.addEventListener("click", () => {

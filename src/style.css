@@ -16,6 +16,25 @@
   -webkit-text-size-adjust: 100%;
 }
 
+@keyframes wiggle {
+  /* src = https://chat.brace.tools/s/94c7e2c4-16e2-485a-9217-1d21444fb27e */
+  0% {
+    transform: translateY(0em) rotate(0deg) skew(2deg, 1deg) scale(1);
+  }
+  25% {
+    transform: translateY(0.02em) rotate(2deg) scale(1.02);
+  }
+  50% {
+    transform: translateY(0em) rotate(0deg) skew(-2deg, -1deg) scale(1.03);
+  }
+  75% {
+    transform: translateY(0.02em) rotate(-2deg) scale(1.02);
+  }
+  100% {
+    transform: translateY(0em) rotate(0deg) skew(2deg, 1deg);
+  }
+}
+
 a {
   font-weight: 500;
   color: var(--contrast-color);
@@ -43,10 +62,12 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  transition: ease;
+  animation: wiggle 1s infinite;
 }
 
 h2 {
-  font-size: 4em;
+  font-size: 6em;
   margin: 0.3em;
   transition: transform 0.5s ease;
 }
