@@ -7,21 +7,27 @@ const app: HTMLDivElement = document.querySelector("#app")!;
 let counter: number = 0;
 let growthRate: number = 0;
 const growthRateSuffix: string = "coffees/second";
+
+const costMultiplier: number = 1.15;
+
 let rotation: number = 0;
 
 const fix: number = 2;
 
-let upgradeACost: number = 10;
-let upgradeBCost: number = 100;
-let upgradeCCost: number = 1000;
+// ---------------------------------------------- ITEMS
 
-const upgradeAIncrease: number = 0.1;
-const upgradeBIncrease: number = 2.0;
-const upgradeCIncrease: number = 50.0;
+interface Item {
+  name: string;
+  cost: number;
+  rate: number;
+  count: number;
+}
 
-let upgradeACount: number = 0;
-let upgradeBCount: number = 0;
-let upgradeCCount: number = 0;
+const availableItems: Item[] = [
+  { name: "double shot", cost: 10, rate: 0.1, count: 0 },
+  { name: "triple shot", cost: 100, rate: 2, count: 0 },
+  { name: "quadruple shot", cost: 1000, rate: 50, count: 0 },
+];
 
 // ---------------------------------------------- FUNCTIONS
 
@@ -39,13 +45,16 @@ function step() {
   fps = 1000 / (curPerformance - prevPerformance);
   prevPerformance = curPerformance;
 
-  upgradeAButton.disabled = counter < upgradeACost;
-  upgradeBButton.disabled = counter < upgradeBCost;
-  upgradeCButton.disabled = counter < upgradeCCost;
-
-  upgradeAButton.innerHTML = `double shot: ${upgradeACount} ($${upgradeACost.toFixed(fix)})`;
-  upgradeBButton.innerHTML = `triple shot: ${upgradeBCount} ($${upgradeBCost.toFixed(fix)})`;
-  upgradeCButton.innerHTML = `quadruple shot: ${upgradeCCount} ($${upgradeCCost.toFixed(fix)})`;
+  Array.from(document.getElementsByTagName("button")).forEach(
+    (upgradeButton) => {
+      availableItems.forEach((element) => {
+        if (upgradeButton.id === element.name) {
+          upgradeButton.disabled = counter < element.cost;
+          upgradeButton.innerHTML = `$${element.cost.toFixed(fix)} ${element.name} (${element.count})`;
+        }
+      });
+    },
+  );
 
   growthRateDisplay.innerHTML = `${growthRate.toFixed(fix)} ${growthRateSuffix}`;
 
@@ -87,38 +96,15 @@ clickButton.addEventListener("click", () => {
   clickButton.style.transform = `rotate(${(rotation += 360)}deg)`;
 });
 
-const upgradeAContent = `double shot: ${upgradeACount} ($${upgradeACost})`;
-const upgradeAButton = document.createElement("button");
-upgradeAButton.innerHTML = upgradeAContent;
-app.append(upgradeAButton);
+availableItems.forEach((element) => {
+  const upgradeButton = document.createElement("button");
+  upgradeButton.id = element.name;
+  app.append(upgradeButton);
 
-upgradeAButton.addEventListener("click", () => {
-  setCounter(-upgradeACost);
-  upgradeACost *= 1.15;
-  growthRate += upgradeAIncrease;
-  upgradeACount++;
-});
-
-const upgradeBContent = `triple shot: ${upgradeBCount} ($${upgradeBCost})`;
-const upgradeBButton = document.createElement("button");
-upgradeBButton.innerHTML = upgradeBContent;
-app.append(upgradeBButton);
-
-upgradeBButton.addEventListener("click", () => {
-  setCounter(-upgradeBCost);
-  upgradeBCost *= 1.15;
-  growthRate += upgradeBIncrease;
-  upgradeBCount++;
-});
-
-const upgradeCContent = `quadruple shot: ${upgradeCCount} ($${upgradeCCost})`;
-const upgradeCButton = document.createElement("button");
-upgradeCButton.innerHTML = upgradeCContent;
-app.append(upgradeCButton);
-
-upgradeCButton.addEventListener("click", () => {
-  setCounter(-upgradeCCost);
-  upgradeCCost *= 1.15;
-  growthRate += upgradeCIncrease;
-  upgradeCCount++;
+  upgradeButton.addEventListener("click", () => {
+    setCounter(-element.cost);
+    element.cost *= costMultiplier;
+    growthRate += element.rate;
+    element.count++;
+  });
 });
