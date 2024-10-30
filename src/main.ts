@@ -1,3 +1,12 @@
+/* 
+
+DESIGN AND NOTES
+
+click to gain espresso shots
+take espresso shots to have enough energy to finish assignments
+
+*/
+
 import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
@@ -9,6 +18,9 @@ let growthRate: number = 0;
 const growthRateSuffix: string = "coffees/second";
 
 const costMultiplier: number = 1.15;
+
+let assignmentCount: number = 5;
+let assignmentGrowthRate: number = .50;
 
 let rotation: number = 0;
 
@@ -72,7 +84,12 @@ const availableItems: Item[] = [
 
 function SetCounter(difference: number = 1) {
   counter += difference;
-  counterDisplay.innerHTML = `${counter.toFixed(fix)}`;
+  counterDisplay.innerHTML = `${Math.floor(counter).toFixed(fix)}`;
+}
+
+function SetAssignmentCount(difference: number = 1) {
+  assignmentCount += difference;
+  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`;
 }
 
 let currentPerformance, fps;
@@ -91,18 +108,22 @@ function Step() {
   );
 
   growthRateDisplay.innerHTML = `${growthRate.toFixed(fix)} ${growthRateSuffix}`;
+  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`
 
   SetCounter(growthRate / fps);
+  SetAssignmentCount((growthRate + assignmentGrowthRate) / fps);
   requestAnimationFrame(Step);
 }
 
 function DisableButton(upgradeButton: HTMLButtonElement) {
   availableItems.forEach((element) => {
     if (upgradeButton.id === element.id) {
-      upgradeButton.disabled = counter < element.cost;
+      upgradeButton.disabled = Math.floor(counter) < element.cost;
       upgradeButton.innerHTML = `$${element.cost.toFixed(fix)} ${element.name} (${element.count})`;
     }
   });
+  assignmentButton.disabled = Math.floor(assignmentCount) < 1 || Math.floor(counter) < 1;
+  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`
 }
 
 // ---------------------------------------------- TITLE DISPLAY
@@ -114,7 +135,7 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// ---------------------------------------------- COUNTER AND GROWTH DISPLAY
+// ---------------------------------------------- COUNTER/GROWTHRATE DISPLAY
 
 const counterDisplay = document.createElement("div");
 counterDisplay.innerHTML = `${counter}`;
@@ -124,7 +145,7 @@ const growthRateDisplay = document.createElement("div");
 growthRateDisplay.innerHTML = `${growthRate} ${growthRateSuffix}`;
 app.append(growthRateDisplay);
 
-// ---------------------------------------------- BUTTON DISPLAY
+// ---------------------------------------------- ESPRESSO DISPLAY
 
 requestAnimationFrame(Step);
 
@@ -140,11 +161,15 @@ clickButton.addEventListener("click", (event) => {
   clickButton.style.transform = `rotate(${(rotation += 360)}deg)`;
 });
 
+const buttonDiv = document.createElement("div");
+buttonDiv.id = 'button-div'
+app.append(buttonDiv);
+
 availableItems.forEach((element) => {
   const upgradeButton = document.createElement("button");
   upgradeButton.id = element.id;
   upgradeButton.title = element.description;
-  app.append(upgradeButton);
+  buttonDiv.append(upgradeButton);
 
   upgradeButton.addEventListener("click", () => {
     SetCounter(-element.cost);
@@ -153,3 +178,20 @@ availableItems.forEach((element) => {
     element.count++;
   });
 });
+
+// ---------------------------------------------- ASSIGNMENT DISPLAY
+
+const assignmentDiv = document.createElement("div");
+app.append(assignmentDiv);
+
+const assignmentButtonDiv = document.createElement("div");
+app.append(assignmentButtonDiv);
+
+const assignmentButton = document.createElement("button");
+assignmentButton.innerHTML = `complete assignment`;
+assignmentButtonDiv.append(assignmentButton)
+
+assignmentButton.addEventListener("click", () => {
+  SetAssignmentCount(-1);
+  SetCounter(-1);
+})

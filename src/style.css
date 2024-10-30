@@ -16,6 +16,24 @@
   -webkit-text-size-adjust: 100%;
 }
 
+@keyframes backgroundChange {
+  0% {
+    background-color: #332819;
+  }
+  25% {
+    background-color: #453013;
+  }
+  50% {
+    background-color: #533d1e;
+  }
+  75% {
+    background-color: #453013;
+  }
+  100% {
+    background-color: #332819;
+  }
+}
+
 @keyframes wiggle {
   /* src = https://chat.brace.tools/s/94c7e2c4-16e2-485a-9217-1d21444fb27e */
   0% {
@@ -51,7 +69,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   color: var(--color);
-  background-color: var(--background-color);
+  /* src = https://github.com/scso-ucsc/Incremental-Game-Development/blob/main/index.html */
+  animation: backgroundChange 20s infinite alternate;
   /* src = https://chat.brace.tools/s/8853a456-7a09-4cf9-8368-49602184c0e4 */
   user-select: none; /* Standard property */
   -moz-user-select: none; /* Firefox */
@@ -96,6 +115,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+#button-div {
+  margin-bottom: 2rem;
 }
 
 @media (prefers-color-scheme: light) {
