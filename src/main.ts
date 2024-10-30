@@ -20,7 +20,7 @@ const growthRateSuffix: string = "coffees/second";
 const costMultiplier: number = 1.15;
 
 let assignmentCount: number = 5;
-let assignmentGrowthRate: number = .50;
+const assignmentGrowthRate: number = 0.5;
 
 let rotation: number = 0;
 
@@ -108,7 +108,7 @@ function Step() {
   );
 
   growthRateDisplay.innerHTML = `${growthRate.toFixed(fix)} ${growthRateSuffix}`;
-  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`
+  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`;
 
   SetCounter(growthRate / fps);
   SetAssignmentCount((growthRate + assignmentGrowthRate) / fps);
@@ -122,8 +122,9 @@ function DisableButton(upgradeButton: HTMLButtonElement) {
       upgradeButton.innerHTML = `$${element.cost.toFixed(fix)} ${element.name} (${element.count})`;
     }
   });
-  assignmentButton.disabled = Math.floor(assignmentCount) < 1 || Math.floor(counter) < 1;
-  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`
+  assignmentButton.disabled =
+    Math.floor(assignmentCount) < 1 || Math.floor(counter) < 1;
+  assignmentDiv.innerHTML = `${Math.floor(assignmentCount)} deadlines(s) to meet`;
 }
 
 // ---------------------------------------------- TITLE DISPLAY
@@ -162,7 +163,7 @@ clickButton.addEventListener("click", (event) => {
 });
 
 const buttonDiv = document.createElement("div");
-buttonDiv.id = 'button-div'
+buttonDiv.id = "button-div";
 app.append(buttonDiv);
 
 availableItems.forEach((element) => {
@@ -189,9 +190,9 @@ app.append(assignmentButtonDiv);
 
 const assignmentButton = document.createElement("button");
 assignmentButton.innerHTML = `complete assignment`;
-assignmentButtonDiv.append(assignmentButton)
+assignmentButtonDiv.append(assignmentButton);
 
 assignmentButton.addEventListener("click", () => {
   SetAssignmentCount(-1);
   SetCounter(-1);
-})
+});
